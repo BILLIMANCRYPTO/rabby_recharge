@@ -260,16 +260,18 @@ def check_gas_account_balance(wallet_address, signature, proxies):
 
 
 # 5. Функция для отправки POST-запроса на recharge
-def send_recharge_request(wallet_address, txid, nonce, signature, chain_id, proxies):
+def send_recharge_request(wallet_address, txid, nonce, signature, chain_id, proxies, required_balance):
     url = f"{base_url}gas_account/recharge"
     timestamp = int(time.time())
+
+    amount_dep = int(required_balance / 10**6)
 
     # POST данные
     data = {
         "account_id": wallet_address,
         "tx_id": txid,
         "chain_id": chain_id,  # Динамически передаём chain_id для соответствующей сети
-        "amount": 20,  # Пополняем на 20 USDC
+        "amount": amount_dep,  # Пополняем на 20 USDC
         "user_addr": wallet_address,
         "nonce": nonce
     }
@@ -361,7 +363,7 @@ def main():
                 f"[bold green]Deposit fulfilled[/bold green] - {txid} | [bold yellow]Amount:[/bold yellow] [cyan]{required_balance / 10 ** 6:.2f}[/cyan] {selected_token} in [magenta]{selected_network.capitalize()}[/magenta]")
 
             # Отправляем запрос на пополнение (recharge)
-            recharge_response = send_recharge_request(wallet_address, txid, nonce, signature, selected_network, proxies)
+            recharge_response = send_recharge_request(wallet_address, txid, nonce, signature, selected_network, proxies, required_balance)
 
             if recharge_response.get("success"):
                 console.print("[bold green]Recharge Success[/bold green]")
