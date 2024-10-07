@@ -269,7 +269,7 @@ def send_recharge_request(wallet_address, txid, nonce, signature, chain_id, prox
         "account_id": wallet_address,
         "tx_id": txid,
         "chain_id": chain_id,  # Динамически передаём chain_id для соответствующей сети
-        "amount": 5,  # Пополняем на 20 USDC
+        "amount": 20,  # Пополняем на 20 USDC
         "user_addr": wallet_address,
         "nonce": nonce
     }
